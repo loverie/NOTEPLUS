@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -36,6 +37,7 @@ import com.example.noteplus.R;
 import com.example.noteplus.database.NotesDatabase;
 import com.example.noteplus.entities.Note;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -45,6 +47,11 @@ public class CreateNoteActivity extends AppCompatActivity {
     private TextView textDateTime;
     private String selectedNoteColor;
     private View viewSubtitleIndicator;
+    private  static final int REQUEST_CODE_STORAGE_PERMISSION=1;
+    private static final int REQUEST_CODE_SELECT_IMAGE=2;
+    private ImageView imageNote;
+    private String selectedImagepath;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -56,6 +63,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         inputNoteText = findViewById(R.id.inputNoteText);
         textDateTime = findViewById(R.id.textDateTime);
         viewSubtitleIndicator = findViewById(R.id.viewSubtitleIndicator);
+        imageNote=findViewById(R.id.imageNote);
 
         textDateTime.setText(
                 new SimpleDateFormat("EEEE,DD,MMMM,yyyy,HH:mm a",Locale.getDefault()).format(new Date())
@@ -68,6 +76,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         });
         selectedNoteColor="#333333";
+        selectedImagepath="";
         initMiscellaneous();
         setSubtitleIndicatorColor();
     }
@@ -90,6 +99,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         note.setNoteText(noteText);
         note.setDateTime(dateTimeStr);
         note.setColor(selectedNoteColor);
+        note.setImagePath(selectedImagepath);
 
         @SuppressLint("StaticFieldLeak")
         class SaveNoteTask extends AsyncTask<Void, Void, Void> {
@@ -193,11 +203,72 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         } );
 
+        layoutMiscellaneous.findViewById(R.id.layoutAddImage).setOnClickListener(v -> {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(CreateNoteActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_STORAGE_PERMISSION);
+            } else {
+                selectImage();
+            }
+        });
 
     }
     private void setSubtitleIndicatorColor() {
         GradientDrawable gradientDrawable = (GradientDrawable) viewSubtitleIndicator.getBackground();
         gradientDrawable.setColor(Color.parseColor(selectedNoteColor));
     }
+    private void selectImage() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_CODE_SELECT_IMAGE);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_STORAGE_PERMISSION && grantResults.length > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                selectImage();
+            } else {
+                Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_CODE_SELECT_IMAGE&&resultCode==RESULT_OK){
+            if(data!=null){
+                Uri selectedImageUri = data.getData();
+                if(selectedImageUri!=null){
+                    try{
+                        InputStream inputStream =getContentResolver().openInputStream(selectedImageUri);
+                        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                        imageNote.setImageBitmap(bitmap);
+                        imageNote.setVisibility(View.VISIBLE);
+                        selectedImagepath=getPathFromUri(selectedImageUri);
+                    }catch(Exception exception){
+                        Toast.makeText(this,exception.getMessage(), Toast.LENGTH_SHORT);
+                    }
+                }
+            }
+
+        }
+    }
+    private String getPathFromUri(Uri contentUri) {
+        String filePath;
+        Cursor cursor = getContentResolver().query(contentUri, null, null, null, null);
+        if (cursor == null) {
+            filePath = contentUri.getPath();
+        } else {
+            cursor.moveToFirst();
+            int index = cursor.getColumnIndex("_data");
+            filePath = cursor.getString(index);
+            cursor.close();
+        }
+        return filePath;
+    }
 }
