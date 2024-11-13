@@ -52,6 +52,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     private ImageView imageNote;
     private String selectedImagepath;
     private Note alreadyAvailableNote;
+    private  AlertDialog dialogDeleteNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -82,6 +83,15 @@ public class CreateNoteActivity extends AppCompatActivity {
             alreadyAvailableNote=(Note)getIntent().getSerializableExtra("note");
             setViewOrUpdateNote();
         }
+        findViewById(R.id.imageRemoveImage).setOnClickListener(new View.OnClickListener(){
+            @Override
+                    public  void onClick(View v){
+                imageNote.setImageBitmap(null);
+                imageNote.setVisibility(View.GONE);
+                findViewById(R.id.imageRemoveImage).setVisibility(View.GONE);
+                selectedImagepath="";
+            }
+        });
         initMiscellaneous();
         setSubtitleIndicatorColor();
     }
@@ -93,6 +103,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         if(alreadyAvailableNote.getImagePath()!=null&&!alreadyAvailableNote.getImagePath().trim().isEmpty()){
             imageNote.setImageBitmap(BitmapFactory.decodeFile(alreadyAvailableNote.getImagePath()));
             imageNote.setVisibility(View.VISIBLE);
+            findViewById(R.id.imageRemoveImage).setVisibility(View.VISIBLE);
             selectedImagepath=alreadyAvailableNote.getImagePath();
         }
     }
@@ -249,7 +260,56 @@ public class CreateNoteActivity extends AppCompatActivity {
                 selectImage();
             }
         });
+        if (alreadyAvailableNote != null) {
+            layoutMiscellaneous.findViewById(R.id.layoutDeleteNote).setVisibility(View.VISIBLE);
+            layoutMiscellaneous.findViewById(R.id.layoutDeleteNote).setOnClickListener(v -> {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                showDeleteNoteDialog();
+            });
+        }
 
+    }
+    private void showDeleteNoteDialog() {
+        if (dialogDeleteNote == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(CreateNoteActivity.this);
+            View view = LayoutInflater.from(this).inflate(
+                    R.layout.layout_delete_note,
+                    (ViewGroup) findViewById(R.id.layoutDeleteNoteContainer)
+            );
+            builder.setView(view);
+            dialogDeleteNote = builder.create();
+            if (dialogDeleteNote.getWindow() != null) {
+                dialogDeleteNote.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+            }
+            view.findViewById(R.id.textDeleteNote).setOnClickListener(v -> {
+                @SuppressLint("StaticFieldLeak")
+                class DeleteNoteTask extends AsyncTask<Void, Void, Void> {
+
+                    @Override
+                    protected Void doInBackground(Void... voids) {
+                        NotesDatabase.getNotesDatabase(getApplicationContext()).noteDao().deleteNote(alreadyAvailableNote);
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        super.onPostExecute(aVoid);
+                        Intent intent = new Intent();
+                        intent.putExtra("isNoteDeleted", true);
+                        setResult(RESULT_OK, intent);
+
+                        dialogDeleteNote.dismiss();
+                        finish();
+                    }
+                }
+
+                new DeleteNoteTask().execute();
+            });
+
+            view.findViewById(R.id.textCancel).setOnClickListener(v -> dialogDeleteNote.dismiss());
+        }
+
+        dialogDeleteNote.show();
     }
     private void setSubtitleIndicatorColor() {
         GradientDrawable gradientDrawable = (GradientDrawable) viewSubtitleIndicator.getBackground();
@@ -285,6 +345,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                         imageNote.setImageBitmap(bitmap);
                         imageNote.setVisibility(View.VISIBLE);
+                        findViewById(R.id.imageRemoveImage).setVisibility(View.VISIBLE);
                         selectedImagepath=getPathFromUri(selectedImageUri);
                     }catch(Exception exception){
                         Toast.makeText(this,exception.getMessage(), Toast.LENGTH_SHORT);
