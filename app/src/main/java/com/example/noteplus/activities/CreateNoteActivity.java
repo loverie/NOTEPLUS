@@ -51,6 +51,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_SELECT_IMAGE=2;
     private ImageView imageNote;
     private String selectedImagepath;
+    private Note alreadyAvailableNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -77,8 +78,23 @@ public class CreateNoteActivity extends AppCompatActivity {
         });
         selectedNoteColor="#333333";
         selectedImagepath="";
+        if(getIntent().getBooleanExtra("isViewOrUpdate",false)){
+            alreadyAvailableNote=(Note)getIntent().getSerializableExtra("note");
+            setViewOrUpdateNote();
+        }
         initMiscellaneous();
         setSubtitleIndicatorColor();
+    }
+    private void setViewOrUpdateNote(){
+        inputNoteTitle.setText(alreadyAvailableNote.getTitle());
+        inputNoteSubtitle.setText(alreadyAvailableNote.getSubtitle());
+        inputNoteText.setText(alreadyAvailableNote.getNoteText());
+        textDateTime.setText(alreadyAvailableNote.getDateTime());
+        if(alreadyAvailableNote.getImagePath()!=null&&!alreadyAvailableNote.getImagePath().trim().isEmpty()){
+            imageNote.setImageBitmap(BitmapFactory.decodeFile(alreadyAvailableNote.getImagePath()));
+            imageNote.setVisibility(View.VISIBLE);
+            selectedImagepath=alreadyAvailableNote.getImagePath();
+        }
     }
 
     private  void saveNote(){
@@ -100,7 +116,9 @@ public class CreateNoteActivity extends AppCompatActivity {
         note.setDateTime(dateTimeStr);
         note.setColor(selectedNoteColor);
         note.setImagePath(selectedImagepath);
-
+        if(alreadyAvailableNote!=null) {
+            note.setId(alreadyAvailableNote.getId());
+        }
         @SuppressLint("StaticFieldLeak")
         class SaveNoteTask extends AsyncTask<Void, Void, Void> {
             @Override
@@ -202,7 +220,25 @@ public class CreateNoteActivity extends AppCompatActivity {
                 setSubtitleIndicatorColor();
             }
         } );
-
+        if (alreadyAvailableNote != null) {
+            final String noteColorCode = alreadyAvailableNote.getColor();
+            if (noteColorCode != null && !noteColorCode.trim().isEmpty()) {
+                switch (noteColorCode) {
+                    case "#FDBE3B":
+                        layoutMiscellaneous.findViewById(R.id.viewColor2).performClick();
+                        break;
+                    case "#FF4842":
+                        layoutMiscellaneous.findViewById(R.id.viewColor3).performClick();
+                        break;
+                    case "#3A52FC":
+                        layoutMiscellaneous.findViewById(R.id.viewColor4).performClick();
+                        break;
+                    case "#000000":
+                        layoutMiscellaneous.findViewById(R.id.viewColor5).performClick();
+                        break;
+                }
+            }
+        }
         layoutMiscellaneous.findViewById(R.id.layoutAddImage).setOnClickListener(v -> {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             if (ContextCompat.checkSelfPermission(getApplicationContext(),
