@@ -1,12 +1,14 @@
 package com.example.noteplus;
 
 import android.content.Intent;
+import android.graphics.ImageDecoder;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -30,10 +32,10 @@ import java.util.HashMap;
 
 
 public class RegisterActivity extends AppCompatActivity {
-    EditText userNameInput,passWordInuput,emailInput;
-    Button registerButton;
-    FirebaseAuth auth;
-    DatabaseReference myRef;
+    private EditText userNameInput,passWordInuput,emailInput;
+    private ImageView registerButton;
+    private FirebaseAuth auth;
+    private DatabaseReference myRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +44,6 @@ public class RegisterActivity extends AppCompatActivity {
         passWordInuput=findViewById(R.id.PasswordInput);
         emailInput=findViewById(R.id.EmailInput);
         registerButton=findViewById(R.id.RegisterButton);
-
         auth=FirebaseAuth.getInstance();
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override

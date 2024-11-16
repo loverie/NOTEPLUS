@@ -21,12 +21,27 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText userLoginInput,passLoginInput;
     private ImageView LoginButton;
     private TextView RegisterButton;
-    FirebaseAuth auth;
+    private  FirebaseAuth auth;
+    private FirebaseUser firebaseUser;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
+        if(firebaseUser!=null)
+        {
+            Intent i =new Intent(LoginActivity.this,MainActivity.class);
+            startActivity(i);
+            finish();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,11 +51,15 @@ public class LoginActivity extends AppCompatActivity {
         LoginButton=findViewById(R.id.login_button);
         RegisterButton=findViewById(R.id.REGISTERINCOME);
         auth = FirebaseAuth.getInstance();
+        firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
+
+
         RegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(LoginActivity.this,RegisterActivity.class);
                 startActivity(i);
+                finish();
             }
         });
         LoginButton.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Intent intent=new Intent(LoginActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
-                                finish();;
+                                finish();
                             }
                             else{
                                 Toast.makeText(LoginActivity.this,"Username or Password is wrong",Toast.LENGTH_SHORT).show();
