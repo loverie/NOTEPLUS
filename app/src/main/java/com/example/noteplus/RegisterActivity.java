@@ -71,19 +71,9 @@ public class RegisterActivity extends AppCompatActivity {
                             hashMap.put("id",userid);
                             hashMap.put("username",username);
                             hashMap.put("imageURL","default");
-
-                            myRef.setValue(hashMap).addOnCanceledListener(new OnCanceledListener() {
-                                @Override
-                                public void onCanceled() {
-                                    if(task.isSuccessful()){
-                                        Intent intent=new Intent(RegisterActivity.this, MainActivity.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(intent);
-                                        finish();;
-                                    }
-                                }
-                            });
-
+                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
                         }else{
                             Toast.makeText(RegisterActivity.this,"Invalid Email or Username",Toast.LENGTH_SHORT).show();
                         }
