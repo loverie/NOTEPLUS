@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -15,12 +16,15 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.noteplus.ChatActivity;
 import com.example.noteplus.LoginActivity;
 import com.example.noteplus.Model.Users;
 import com.example.noteplus.R;
@@ -28,6 +32,7 @@ import com.example.noteplus.adapter.NoteAdapter;
 import com.example.noteplus.database.NotesDatabase;
 import com.example.noteplus.entities.Note;
 import com.example.noteplus.listener.NotesListener;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -54,9 +59,12 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
     private RecyclerView notesRecyclerView;
     private List<Note> noteList;
     private NoteAdapter notesAdapter;
+    private ImageView chatImage;
     private int noteClickedPosition=-1;
     FirebaseUser firebaseUser;
     DatabaseReference myRef;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +90,24 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         layoutQuickActions = findViewById(R.id.layoutQuickActions);
         imageAddNote = findViewById(R.id.imageAddNote);
         imageAddImage = findViewById(R.id.imageAddImage);
+        Button button=findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+            }
+        });
+        chatImage=findViewById(R.id.chatImage);
+        chatImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i =new Intent(MainActivity.this, ChatActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
         imageAddWebLink = findViewById(R.id.imageAddWebLink);
         imageAddNoteMain = findViewById(R.id.imageAddNoteMain);
         imageAddNoteMain.setOnClickListener(v -> startActivityForResult(
@@ -175,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
     }
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu){
-//        getMenuInflater().inflate(R.menu.menu,menu);
+//        getMenuInflater().inflate(R.menu.menu, menu);
 //        return true;
 //    }
 //    @Override

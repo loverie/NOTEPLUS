@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
+
     <TextView
         android:id="@+id/textMyNotes"
         android:layout_width="match_parent"
@@ -95,6 +96,14 @@
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_image"
             app:tint="@color/colorIcons" />
+        <ImageView
+            android:id="@+id/chatImage"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="15dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_chat"
+            app:tint="@color/colorIcons" />
 
         <ImageView
             android:id="@+id/imageAddWebLink"
@@ -104,6 +113,9 @@
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_web_link"
             app:tint="@color/colorIcons" />
+
+
+
     </LinearLayout>
 
     <ImageView
@@ -119,5 +131,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/layoutQuickActions"
         app:tint="@color/colorPrimary" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_weight="1"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
