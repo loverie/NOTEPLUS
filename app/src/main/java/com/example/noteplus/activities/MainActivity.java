@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.example.noteplus.ChatActivity;
 import com.example.noteplus.LoginActivity;
 import com.example.noteplus.Model.Users;
+import com.example.noteplus.ProfileActivity;
 import com.example.noteplus.R;
 import com.example.noteplus.adapter.NoteAdapter;
 import com.example.noteplus.database.NotesDatabase;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
     private NoteAdapter notesAdapter;
     private ImageView chatImage;
     private int noteClickedPosition=-1;
+    private ImageView imageProfile;
     FirebaseUser firebaseUser;
     DatabaseReference myRef;
     private DrawerLayout drawerLayout;
@@ -90,6 +92,15 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         layoutQuickActions = findViewById(R.id.layoutQuickActions);
         imageAddNote = findViewById(R.id.imageAddNote);
         imageAddImage = findViewById(R.id.imageAddImage);
+        imageProfile=findViewById(R.id.imageProfile);
+        imageProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i =new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
         Button button=findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -104,6 +104,14 @@
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_chat"
             app:tint="@color/colorIcons" />
+        <ImageView
+            android:id="@+id/imageProfile"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="15dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_profile"
+            app:tint="@color/colorIcons" />
 
         <ImageView
             android:id="@+id/imageAddWebLink"
