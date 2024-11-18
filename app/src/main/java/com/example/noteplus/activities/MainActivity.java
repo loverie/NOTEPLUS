@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Users users=snapshot.getValue(Users.class);
-                Toast.makeText(MainActivity.this,"User Login:"+users.getUsername(),Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this,"User Login:"+users.getUsername(),Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -106,8 +106,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                finish();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
         chatImage=findViewById(R.id.chatImage);

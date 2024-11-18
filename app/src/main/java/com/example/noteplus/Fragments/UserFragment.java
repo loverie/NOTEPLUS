@@ -60,7 +60,7 @@ public class UserFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mUsers = new ArrayList<>();
-        userAdapter = new UserAdapter(getContext(), mUsers);  // 初始化适配器
+        userAdapter = new UserAdapter(getContext(), mUsers,true);  // 初始化适配器
         recyclerView.setAdapter(userAdapter);  // 设置适配器
         ReadUsers();
         return view;

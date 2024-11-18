@@ -52,6 +52,7 @@ public class MessageActivity extends AppCompatActivity {
     private DatabaseReference myRef;
     private ImageView msgback;
     private String userid;
+    ValueEventListener seenListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +123,28 @@ public class MessageActivity extends AppCompatActivity {
             msg_editText.setText("");
         }
     });
+    SeenMessage(userid);
+    }
+    private void SeenMessage(String userid){
+        reference=FirebaseDatabase.getInstance().getReference("Chats");
+        seenListener=reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot snapshot1:snapshot.getChildren()){
+                    Chat chat=snapshot1.getValue(Chat.class);
+                    if(chat.getReceiver().equals(fuser.getUid())&&chat.getSender().equals(userid)){
+                        HashMap<String,Object> hashMap=new HashMap<>();
+                        hashMap.put("isseen",true);
+                        snapshot1.getRef().updateChildren(hashMap);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
     private void sendMessage(String sender,String receiver,String message){
         DatabaseReference reference1=FirebaseDatabase.getInstance().getReference();
@@ -129,6 +152,7 @@ public class MessageActivity extends AppCompatActivity {
         hashMap.put("sender",sender);
         hashMap.put("receiver",receiver);
         hashMap.put("message",message);
+        hashMap.put("isseen",false);
 
         reference1.child("Chats").push().setValue(hashMap);
 
@@ -174,6 +198,24 @@ public class MessageActivity extends AppCompatActivity {
 
             }
         });
+    }
+    private void CheckStatus(String status) {
+        myRef = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
+        HashMap<String,Object> hashMap=new HashMap<>();
+        hashMap.put("status",status);
+        myRef.updateChildren(hashMap);
+    }
+    @Override
+    protected  void onResume(){
+        super.onResume();
+        CheckStatus("online");
+    }
+    @Override
+    protected  void onPause(){
+        super.onPause();
+        reference.removeEventListener(seenListener);
+        CheckStatus("offline");
+
     }
 
 

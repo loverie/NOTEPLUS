@@ -98,7 +98,7 @@ public class ChatFragment extends Fragment {
                 for (Users user : mUsers) {
                     Log.d("ChatFragment", "User: " + user.getUsername());
                 }
-                userAdapter=new UserAdapter(getContext(),mUsers);
+                userAdapter=new UserAdapter(getContext(),mUsers,true);
                 recyclerView.setAdapter(userAdapter);
 
             }
