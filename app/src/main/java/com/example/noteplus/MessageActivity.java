@@ -51,6 +51,7 @@ public class MessageActivity extends AppCompatActivity {
     private RecyclerView recyclerView1;
     private DatabaseReference myRef;
     private ImageView msgback;
+    private String userid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +88,7 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
     intent=getIntent();
-    String userid=intent.getStringExtra("userid");
+    userid=intent.getStringExtra("userid");
     fuser= FirebaseAuth.getInstance().getCurrentUser();
     reference= FirebaseDatabase.getInstance().getReference("Users").child(userid);
     reference.addValueEventListener(new ValueEventListener() {
@@ -130,6 +131,22 @@ public class MessageActivity extends AppCompatActivity {
         hashMap.put("message",message);
 
         reference1.child("Chats").push().setValue(hashMap);
+
+
+        final DatabaseReference chatRef=FirebaseDatabase.getInstance().getReference("ChatList").child(fuser.getUid()).child(userid);
+        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.exists()){
+                    chatRef.child("id").setValue(userid);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
     private  void readMessages(String myid,String userid,String imageurl){
         mChat = new ArrayList<>();
