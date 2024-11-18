@@ -67,14 +67,24 @@ public class RegisterActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
                             FirebaseUser firebaseUser = auth.getCurrentUser();
                             String userid=firebaseUser.getUid();
-                            myRef= FirebaseDatabase.getInstance().getReference("MyUsers").child(userid);
+                            myRef= FirebaseDatabase.getInstance().getReference("Users").child(userid);
                             HashMap<String,String> hashMap=new HashMap<>();
                             hashMap.put("id",userid);
                             hashMap.put("username",username);
                             hashMap.put("imageURL","default");
-                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
+                            myRef.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        Toast.makeText(RegisterActivity.this, "Database Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                         }else{
                             Toast.makeText(RegisterActivity.this,"Invalid Email or Username",Toast.LENGTH_SHORT).show();
                         }

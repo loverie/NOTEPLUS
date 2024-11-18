@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MessageActivity"
+    android:background="@color/colorPrimary">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="566dp"
+        android:layout_height="59dp"
+        android:background="@color/black"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageview_profile"
+        android:visibility="gone"/>
+    <TextView
+        android:id="@+id/userNameOutput"
+        android:layout_width="88dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/colorWhiteTextColor"
+        android:text="TextView"
+        android:textColor="@color/colorWhiteTextColor"
+        android:textColorHint="@color/colorWhiteTextColor"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="494dp"
+        android:layout_height="730dp"
+        android:layout_centerVertical="true"
+        android:background="@color/colorPrimary"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.485"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.0">
+
+        <EditText
+            android:id="@+id/text_send"
+            android:layout_width="313dp"
+            android:layout_height="42dp"
+            android:layout_below="@+id/recycler_view"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="65dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="1dp"
+            android:background="@color/colorSearchBackground"
+            android:hint="Type a Message……"
+            android:rotationX="0"
+            android:textColorHint="@color/colorNoteSubtitleText" />
+
+        <ImageButton
+            android:id="@+id/btn_send"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_alignBottom="@+id/text_send"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="62dp"
+            android:layout_marginRight="62dp"
+            android:layout_marginBottom="5dp"
+            android:layout_toEndOf="@+id/text_send"
+            android:background="@drawable/ic_send" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="385dp"
+            android:layout_height="650dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="53dp"
+            android:scrollbarSize="12dp" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/Back_message"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
