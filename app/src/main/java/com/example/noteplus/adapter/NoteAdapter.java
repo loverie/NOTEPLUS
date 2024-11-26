@@ -83,27 +83,44 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         }
 
         void setNote(Note note) {
-            textTitle.setText(note.getTitle());
-            if (note.getSubtitle().trim().isEmpty()) {
+            if ("IMG".equals(note.getTitle())) {
+                // 如果标题是 "IMG"，隐藏所有文本，仅显示图片
+                textTitle.setVisibility(View.GONE);
                 textSubtitle.setVisibility(View.GONE);
-            } else {
-                textSubtitle.setText(note.getSubtitle());
-            }
-            textDateTime.setText(note.getDateTime());
-            GradientDrawable gradientDrawable = (GradientDrawable) layoutNote.getBackground();
-            if(note.getColor()!=null){
-                gradientDrawable.setColor(Color.parseColor(note.getColor()));
+                textDateTime.setVisibility(View.GONE);
+
+                // 显示图片
+                if (note.getImagePath() != null) {
+                    Glide.with(itemView.getContext())
+                            .load(note.getImagePath()) // 加载图片路径
+                            .into(imageNote); // 加载到 imageNote 中
+                    imageNote.setVisibility(View.VISIBLE);
+                } else {
+                    imageNote.setVisibility(View.GONE); // 如果没有图片，隐藏 ImageView
+                }
             }else {
-                gradientDrawable.setColor(Color.parseColor("#333333"));
-            }
-            if (note.getImagePath() != null) {
-                // 使用 Glide 异步加载图片
-                Glide.with(itemView.getContext())
-                        .load(note.getImagePath())  // 加载图片路径
-                        .into(imageNote);  // 加载到 imageNote 中
-                imageNote.setVisibility(View.VISIBLE);
-            } else{
-                imageNote.setVisibility(View.GONE);
+                textTitle.setText(note.getTitle());
+                if (note.getSubtitle().trim().isEmpty()) {
+                    textSubtitle.setVisibility(View.GONE);
+                } else {
+                    textSubtitle.setText(note.getSubtitle());
+                }
+                textDateTime.setText(note.getDateTime());
+                GradientDrawable gradientDrawable = (GradientDrawable) layoutNote.getBackground();
+                if (note.getColor() != null) {
+                    gradientDrawable.setColor(Color.parseColor(note.getColor()));
+                } else {
+                    gradientDrawable.setColor(Color.parseColor("#333333"));
+                }
+                if (note.getImagePath() != null) {
+                    // 使用 Glide 异步加载图片
+                    Glide.with(itemView.getContext())
+                            .load(note.getImagePath())  // 加载图片路径
+                            .into(imageNote);  // 加载到 imageNote 中
+                    imageNote.setVisibility(View.VISIBLE);
+                } else {
+                    imageNote.setVisibility(View.GONE);
+                }
             }
         }
     }
