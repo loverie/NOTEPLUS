@@ -2,6 +2,8 @@ package com.example.noteplus.activities; // 修改为你的包名
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
     private static final int REQUEST_CODE_ADD_NOTE = 1;
     public static final int REQUEST_CODE_UPDATE_NOTE=2;
     public static final int REQUEST_CODE_SHOW_NOTES=3;
+    private static final int REQUEST_CODE_SELECT_IMAGES = 4;
     private TextView textMyNotes;
     private LinearLayout layoutSearch;
     private EditText inputSearch;
@@ -84,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         layoutQuickActions = findViewById(R.id.layoutQuickActions);
         imageAddNote = findViewById(R.id.imageAddNote);
         imageAddImage = findViewById(R.id.imageAddImage);
+        imageAddImage.setOnClickListener(v -> openImagePicker());
         imageProfile=findViewById(R.id.imageProfile);
         imageProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,6 +198,76 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                 getNotes(REQUEST_CODE_UPDATE_NOTE,data.getBooleanExtra("isNoteDeleted",false));
             }
         }
+        if (requestCode == REQUEST_CODE_SELECT_IMAGES && resultCode == RESULT_OK) {
+            if (data != null) {
+                List<String> imagePaths = new ArrayList<>();
+
+                if (data.getClipData() != null) {
+                    // 多选
+                    for (int i = 0; i < data.getClipData().getItemCount(); i++) {
+                        Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                        imagePaths.add(getPathFromUri(imageUri));
+                    }
+                } else if (data.getData() != null) {
+                    // 单选
+                    Uri imageUri = data.getData();
+                    imagePaths.add(getPathFromUri(imageUri));
+                }
+
+                // 创建笔记
+                createImageNotes(imagePaths);
+            }
+        }
+    }
+    private String getPathFromUri(Uri uri) {
+        String filePath;
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        if (cursor == null) {
+            filePath = uri.getPath();
+        } else {
+            cursor.moveToFirst();
+            int index = cursor.getColumnIndex("_data");
+            filePath = cursor.getString(index);
+            cursor.close();
+        }
+        return filePath;
+    }
+    private void openImagePicker() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); // 允许多选
+        startActivityForResult(Intent.createChooser(intent, "Select Images"), REQUEST_CODE_SELECT_IMAGES);
+    }
+    @SuppressLint("StaticFieldLeak")
+    private void createImageNotes(List<String> imagePaths) {
+        class SaveNotesTask extends AsyncTask<Void, Void, Void> {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                for (String imagePath : imagePaths) {
+                    Note note = new Note();
+                    note.setTitle("IMG");
+                    note.setSubtitle("IMG");
+                    note.setNoteText("IMG");
+                    note.setImagePath(imagePath);
+
+                    // 关联当前用户
+                    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    note.setUserId(userId);
+
+                    // 插入数据库
+                    NotesDatabase.getNotesDatabase(getApplicationContext()).noteDao().insertNote(note);
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void unused) {
+                super.onPostExecute(unused);
+                getNotes(REQUEST_CODE_SHOW_NOTES, false); // 刷新界面
+            }
+        }
+
+        new SaveNotesTask().execute();
     }
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu){

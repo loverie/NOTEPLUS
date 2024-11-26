@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.noteplus.R;
 import com.example.noteplus.entities.Note;
 import com.example.noteplus.listener.NotesListener;
@@ -95,10 +96,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
             }else {
                 gradientDrawable.setColor(Color.parseColor("#333333"));
             }
-            if(note.getImagePath()!=null){
-                imageNote.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath()));
+            if (note.getImagePath() != null) {
+                // 使用 Glide 异步加载图片
+                Glide.with(itemView.getContext())
+                        .load(note.getImagePath())  // 加载图片路径
+                        .into(imageNote);  // 加载到 imageNote 中
                 imageNote.setVisibility(View.VISIBLE);
-            }else{
+            } else{
                 imageNote.setVisibility(View.GONE);
             }
         }
@@ -107,22 +111,25 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
-            public void run(){
+            public void run() {
+                List<Note> filteredNotes;
                 if (searchKeyword.trim().isEmpty()) {
-                    notes = notesSource;
+                    filteredNotes = notesSource;
                 } else {
-                    ArrayList<Note> temp = new ArrayList<>();
+                    filteredNotes = new ArrayList<>();
                     for (Note note : notesSource) {
                         if (note.getTitle().toLowerCase().contains(searchKeyword.toLowerCase()) ||
                                 note.getSubtitle().toLowerCase().contains(searchKeyword.toLowerCase()) ||
                                 note.getNoteText().toLowerCase().contains(searchKeyword.toLowerCase())) {
-                            temp.add(note);
+                            filteredNotes.add(note);
                         }
                     }
-                    notes = temp;
                 }
 
-                new Handler(Looper.getMainLooper()).post(() -> notifyDataSetChanged());
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    notes = filteredNotes;
+                    notifyDataSetChanged();
+                });
             }
         }, 500);
     }
