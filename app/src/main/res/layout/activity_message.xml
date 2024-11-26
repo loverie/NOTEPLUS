@@ -5,14 +5,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MessageActivity"
+    tools:context=".activities.MessageActivity"
     android:background="@color/colorPrimary">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="566dp"
         android:layout_height="59dp"
-        android:background="@color/black"
+        android:background="@color/colorDefaultNoteColor"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,56 +39,72 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
-        android:layout_width="494dp"
-        android:layout_height="730dp"
+        android:layout_width="405dp"
+        android:layout_height="777dp"
         android:layout_centerVertical="true"
         android:background="@color/colorPrimary"
         android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="284dp"
+            android:layout_height="89dp"
+            android:layout_below="@+id/recycler_view"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            app:srcCompat="@drawable/background_mms" />
 
         <EditText
             android:id="@+id/text_send"
-            android:layout_width="313dp"
-            android:layout_height="42dp"
+            android:layout_width="327dp"
+            android:layout_height="30dp"
             android:layout_below="@+id/recycler_view"
-            android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="65dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="1dp"
-            android:background="@color/colorSearchBackground"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="7dp"
+            android:layout_toStartOf="@+id/btn_send"
+            android:background="#1C1C1C"
             android:hint="Type a Message……"
             android:rotationX="0"
+            android:textColor="#FFFFFF"
             android:textColorHint="@color/colorNoteSubtitleText" />
 
         <ImageButton
             android:id="@+id/btn_send"
             android:layout_width="34dp"
             android:layout_height="34dp"
-            android:layout_alignBottom="@+id/text_send"
+            android:layout_below="@+id/recycler_view"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="62dp"
-            android:layout_marginRight="62dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="17dp"
+            android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"
-            android:layout_toEndOf="@+id/text_send"
             android:background="@drawable/ic_send" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
-            android:layout_width="385dp"
-            android:layout_height="650dp"
+            android:layout_width="392dp"
+            android:layout_height="720dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="53dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginEnd="2dp"
             android:scrollbarSize="12dp" />
+
+
     </RelativeLayout>
 
     <ImageView

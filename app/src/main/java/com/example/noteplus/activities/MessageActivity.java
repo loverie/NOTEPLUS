@@ -1,4 +1,4 @@
-package com.example.noteplus;
+package com.example.noteplus.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,18 +12,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.noteplus.Model.Chat;
 import com.example.noteplus.Model.Users;
+import com.example.noteplus.R;
 import com.example.noteplus.adapter.MessageAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

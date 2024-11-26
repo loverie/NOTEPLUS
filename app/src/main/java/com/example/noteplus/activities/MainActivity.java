@@ -13,21 +13,13 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.noteplus.ChatActivity;
-import com.example.noteplus.LoginActivity;
 import com.example.noteplus.Model.Users;
-import com.example.noteplus.ProfileActivity;
 import com.example.noteplus.R;
 import com.example.noteplus.adapter.NoteAdapter;
 import com.example.noteplus.database.NotesDatabase;

@@ -1,4 +1,4 @@
-package com.example.noteplus;
+package com.example.noteplus.activities;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -11,17 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.noteplus.Model.Users;
-import com.example.noteplus.activities.MainActivity;
+import com.example.noteplus.R;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -39,7 +35,6 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 public class ProfileActivity extends AppCompatActivity {
     private TextView username;

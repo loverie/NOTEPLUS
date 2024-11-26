@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.noteplus.MessageActivity;
+import com.example.noteplus.activities.MessageActivity;
 import com.example.noteplus.Model.Users;
 import com.example.noteplus.R;
 

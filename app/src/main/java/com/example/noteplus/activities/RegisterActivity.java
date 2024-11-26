@@ -1,25 +1,17 @@
-package com.example.noteplus;
+package com.example.noteplus.activities;
 
 import android.content.Intent;
-import android.graphics.ImageDecoder;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.noteplus.activities.MainActivity;
-import com.google.android.gms.tasks.OnCanceledListener;
+import com.example.noteplus.R;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
