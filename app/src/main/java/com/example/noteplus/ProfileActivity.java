@@ -21,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.noteplus.Model.Users;
+import com.example.noteplus.activities.MainActivity;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -49,6 +50,7 @@ public class ProfileActivity extends AppCompatActivity {
     private static final int IMAGE_REQUEST=1;
     private StorageTask uploadTask;
     private Uri imageUri;
+    private ImageView logoutView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,10 +58,16 @@ public class ProfileActivity extends AppCompatActivity {
         imageView=findViewById(R.id.profile_image2);
         username=findViewById(R.id.profile_username);
         storageReference= FirebaseStorage.getInstance().getReference("uploads");
-
+        logoutView=findViewById(R.id.imageView4);
+        logoutView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(ProfileActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            }
+        });
         fuser= FirebaseAuth.getInstance().getCurrentUser();
         reference=FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
-
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

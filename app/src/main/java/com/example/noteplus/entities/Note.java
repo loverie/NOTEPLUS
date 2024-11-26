@@ -34,6 +34,9 @@ public class Note implements Serializable {
     @ColumnInfo(name = "webLink")
     private String webLink;
 
+    @ColumnInfo(name = "userId")
+    private String userId;
+
     public int getId() {
         return id;
     }
@@ -103,4 +106,6 @@ public class Note implements Serializable {
     public String toString() {
         return title + "：" + dateTime;
     }
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
 }

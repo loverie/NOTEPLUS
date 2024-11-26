@@ -36,6 +36,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.example.noteplus.R;
 import com.example.noteplus.database.NotesDatabase;
 import com.example.noteplus.entities.Note;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -130,6 +131,8 @@ public class CreateNoteActivity extends AppCompatActivity {
         if(alreadyAvailableNote!=null) {
             note.setId(alreadyAvailableNote.getId());
         }
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        note.setUserId(userId);
         @SuppressLint("StaticFieldLeak")
         class SaveNoteTask extends AsyncTask<Void, Void, Void> {
             @Override

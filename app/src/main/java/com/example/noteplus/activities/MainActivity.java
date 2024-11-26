@@ -98,15 +98,6 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             public void onClick(View view) {
                 Intent i =new Intent(MainActivity.this, ProfileActivity.class);
                 startActivity(i);
-                finish();
-            }
-        });
-        Button button=findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(MainActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
         chatImage=findViewById(R.id.chatImage);
@@ -115,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             public void onClick(View view) {
                 Intent i =new Intent(MainActivity.this, ChatActivity.class);
                 startActivity(i);
-                finish();
             }
         });
         imageAddWebLink = findViewById(R.id.imageAddWebLink);
@@ -156,29 +146,33 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
     @Override
     public void onNoteClicked(Note note, int position) {
-            noteClickedPosition=position;
-            Intent intent=new Intent(getApplicationContext(),CreateNoteActivity.class);
-            intent.putExtra("isViewOrUpdate",true);
-            intent.putExtra("note",note);
-            startActivityForResult(intent,REQUEST_CODE_UPDATE_NOTE);
+        noteClickedPosition = position;
+        Intent intent = new Intent(getApplicationContext(), CreateNoteActivity.class);
+        intent.putExtra("isViewOrUpdate", true);
+        intent.putExtra("note", note);
+        startActivityForResult(intent, REQUEST_CODE_UPDATE_NOTE);
     }
 
-    private void getNotes(final int requestCode,final boolean isNoteDeleted) {
-
+    private void getNotes(final int requestCode, final boolean isNoteDeleted) {
         @SuppressLint("StaticFieldLeak")
         class GetNoteTask extends AsyncTask<Void, Void, List<Note>> {
 
             @Override
             protected List<Note> doInBackground(Void... voids) {
+                // 获取当前用户ID
+                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                // 查询当前用户的笔记
                 return NotesDatabase.getNotesDatabase(getApplicationContext())
-                        .noteDao().getAllNotes();
+                        .noteDao().getNotesByUserId(userId);
             }
 
             @Override
             protected void onPostExecute(List<Note> notes) {
                 super.onPostExecute(notes);
                 if (requestCode == REQUEST_CODE_SHOW_NOTES) {
-                    noteList.addAll(notes);
+                    noteList.clear(); // 清空旧数据
+                    noteList.addAll(notes); // 添加新的用户笔记
                     notesAdapter.notifyDataSetChanged();
                 } else if (requestCode == REQUEST_CODE_ADD_NOTE) {
                     noteList.add(0, notes.get(0));
@@ -186,10 +180,10 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                     notesRecyclerView.smoothScrollToPosition(0);
                 } else if (requestCode == REQUEST_CODE_UPDATE_NOTE) {
                     noteList.remove(noteClickedPosition);
-                    if(isNoteDeleted) {
+                    if (isNoteDeleted) {
                         notesAdapter.notifyItemRemoved(noteClickedPosition);
-                    }else{
-                        noteList.add(noteClickedPosition,notes.get(noteClickedPosition));
+                    } else {
+                        noteList.add(noteClickedPosition, notes.get(noteClickedPosition));
                         notesAdapter.notifyItemChanged(noteClickedPosition);
                     }
                 }
