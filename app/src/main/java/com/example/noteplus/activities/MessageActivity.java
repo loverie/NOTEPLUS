@@ -1,6 +1,10 @@
 package com.example.noteplus.activities;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -177,6 +182,7 @@ public class MessageActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mChat.clear();
                 for(DataSnapshot snapshot1:snapshot.getChildren()){
+
                     Log.d("ChatSnapshot", "Chat data: " + snapshot1.getValue());
                     Chat chat=snapshot1.getValue(Chat.class);
                     Log.d("ChatSnapshot", "Chat datar: " + chat.getReceiver());
@@ -184,6 +190,9 @@ public class MessageActivity extends AppCompatActivity {
                     if(chat.getReceiver().equals(myid)&&chat.getSender().equals(userid)||
                     chat.getReceiver().equals(userid)&&chat.getSender().equals(myid)){
                         mChat.add(chat);
+                    }
+                    if(chat.getReceiver().equals(myid) && !chat.getSender().equals(fuser.getUid())) {
+                        showNotification(chat.getMessage());
                     }
                 }
                 messageAdapter =new MessageAdapter(MessageActivity.this,mChat,imageurl);
@@ -214,6 +223,27 @@ public class MessageActivity extends AppCompatActivity {
         CheckStatus("offline");
 
     }
+    public void showNotification(String message) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+        // Android 8.0 及以上需要创建一个通知渠道
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "New Message Channel";
+            String description = "Channel for new messages";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("NewMessageChannel", name, importance);
+            channel.setDescription(description);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "NewMessageChannel")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("New Message")
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true); // 点击后自动消失
+
+        notificationManager.notify(0, builder.build());
+    }
 
 }
