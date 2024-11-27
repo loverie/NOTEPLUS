@@ -29,10 +29,9 @@
 
     <TextView
         android:id="@+id/UserText"
-        android:layout_width="83dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="268dp"
+        android:layout_width="329dp"
+        android:layout_height="31dp"
+        android:layout_marginEnd="20dp"
         android:text="User"
         android:textColor="@color/white"
         android:textSize="16sp"

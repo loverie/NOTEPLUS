@@ -22,10 +22,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageview_profile"
         android:visibility="gone"/>
+
     <TextView
         android:id="@+id/userNameOutput"
-        android:layout_width="88dp"
-        android:layout_height="35dp"
+        android:layout_width="231dp"
+        android:layout_height="39dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/colorWhiteTextColor"
         android:text="TextView"

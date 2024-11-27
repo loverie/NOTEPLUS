@@ -15,7 +15,7 @@
         android:layout_marginEnd="12dp"
         android:fontFamily="@font/ubuntu_bold"
         android:includeFontPadding="false"
-        android:text="@string/activity_main_text_my_note_text"
+        android:text="TNotes"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintTop_toTopOf="parent" />
