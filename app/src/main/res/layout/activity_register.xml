@@ -12,16 +12,16 @@
 
     <TextView
         android:id="@+id/Registeration"
-        android:layout_width="wrap_content"
-        android:layout_height="55dp"
-        android:layout_marginTop="60dp"
-        android:text="Registeration"
+        android:layout_width="189dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="68dp"
+        android:text="Register"
         android:textColor="@color/colorWhiteTextColor"
         android:textColorLink="@color/colorWhiteTextColor"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.644"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -88,6 +88,16 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/EmailInput" />
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="541dp"
+        android:layout_height="373dp"
+        android:layout_marginStart="-65dp"
+        android:layout_marginBottom="64dp"
+        app:layout_constraintBottom_toTopOf="@+id/userInputText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/register" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
