@@ -27,6 +27,7 @@ import com.example.noteplus.adapter.NoteAdapter;
 import com.example.noteplus.database.NotesDatabase;
 import com.example.noteplus.entities.Note;
 import com.example.noteplus.listener.NotesListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,6 +38,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
+import android.view.MenuItem;
+import android.widget.PopupMenu;
 
 public class MainActivity extends AppCompatActivity implements NotesListener {
 
@@ -105,10 +108,8 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             }
         });
         imageAddWebLink = findViewById(R.id.imageAddWebLink);
-        imageAddNoteMain = findViewById(R.id.imageAddNoteMain);
-        imageAddNoteMain.setOnClickListener(v -> startActivityForResult(
-                new Intent(getApplicationContext(), CreateNoteActivity.class), REQUEST_CODE_ADD_NOTE)
-        );
+        FloatingActionButton fabAddNote = findViewById(R.id.fabAddNote);
+        fabAddNote.setOnClickListener(v -> showNoteTypeMenu(v));
         // 你可以在这里设置事件监听器或初始化数据
         notesRecyclerView=findViewById(R.id.notesRecyclerView);
         notesRecyclerView.setLayoutManager(
@@ -268,6 +269,24 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         }
 
         new SaveNotesTask().execute();
+    }
+    private void showNoteTypeMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.getMenuInflater().inflate(R.menu.menu_note_type, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.menu_text_note:
+                    startActivityForResult(
+                        new Intent(getApplicationContext(), CreateNoteActivity.class), REQUEST_CODE_ADD_NOTE);
+                    return true;
+                case R.id.menu_handwritten_note:
+                    startActivity(new Intent(getApplicationContext(), HandwrittenNoteActivity.class));
+                    return true;
+                default:
+                    return false;
+            }
+        });
+        popupMenu.show();
     }
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu){
