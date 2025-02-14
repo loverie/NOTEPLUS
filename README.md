@@ -7,4 +7,6 @@
 - 用户认证：集成 Firebase Authentication 支持用户注册和登录，保证账户安全。
 - 用户管理: 允许用户自行修改头像等内容.
 ## 运行说明：
-在Android Studio中打开项目，通过模拟Android 7.0及以上的手机或使用Android 7.0及以上的手机进行使用
+- 在Android Studio中打开项目，通过模拟Android 7.0及以上的手机或使用Android 7.0及以上的手机进行使用（API 35+)
+- 需要使用魔法以链接Firebase
+
